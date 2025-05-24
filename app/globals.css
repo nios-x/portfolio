@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: font1;
+  src: url("./src/fonts/file1.woff2");
+}
+@font-face {
+  font-family: font2;
+  src: url("./src/fonts/file2.woff2");
+}
+
+@font-face {
+  font-family: font3;
+  src: url("./src/fonts/file3.woff2");
+}
+
+@font-face {
+  font-family: font4;
+  src: url("./src/fonts/file.woff2");
+}
+
+@font-face {
+  font-family: hel;
+  src: url("./src/fonts/hel.woff2");
+}
+
+@font-face {
+  font-family: inter;
+  src: url("./src/fonts/inter.ttf");
+}
+.font1{
+  font-family: font1;
+}.font2{
+  font-family: font2;
+}.font3{
+  font-family: font3;
+}.font4{
+  font-family: font4;
+}.inter{
+  font-family: inter;
+}.hel{
+  font-family: hel;
+}
+
+.inner-shadow-bo {
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
+  border: 1px solid #ccc;
+  font-family: sans-serif;
+}
