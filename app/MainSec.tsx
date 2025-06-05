@@ -1,91 +1,86 @@
 "use client"
+
 import React, { useEffect, useRef, useState } from 'react'
 import Sec2 from "./Sec2"
+
 export default function MainSec() {
   const [rotationBall1, setRotationBall1] = useState(0)
   const [rotationBall2, setRotationBall2] = useState(0)
   const [moredistance, setMoredistance] = useState(0)
   const [depth, setDepth] = useState(0)
-
   const [isD, setIsd] = useState(false)
-  const depthRef = useRef(0); // to track live value
-  
-        const ball1 = useRef<HTMLDivElement | null>(null);
-        const ball2 = useRef<HTMLDivElement | null>(null);
+
+  const depthRef = useRef(0)
+  const ball1 = useRef<HTMLDivElement | null>(null)
+  const ball2 = useRef<HTMLDivElement | null>(null)
+
   useEffect(() => {
-    function abc() {
-      if (depthRef.current > 5){
-        setIsd(true)
-        return;
+    if (typeof window === 'undefined') return
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (ball1.current && ball2.current) {
+        const rect1 = ball1.current.getBoundingClientRect()
+        const rect2 = ball2.current.getBoundingClientRect()
+
+        const centerxball1 = rect1.left + rect1.width / 2
+        const centerxball2 = rect2.left + rect2.width / 2
+        const centeryball1 = rect1.top + rect1.height / 2
+        const centeryball2 = rect2.top + rect2.height / 2
+
+        const dx1 = e.clientX - centerxball1
+        const dx2 = e.clientX - centerxball2
+        const dy1 = centeryball1 - e.clientY
+        const dy2 = centeryball2 - e.clientY
+
+        setMoredistance(Math.log10(Math.sqrt(dx1 * dx1 + dx2 * dx2)))
+        setRotationBall1(Math.atan2(dx1, dy1) * (180 / Math.PI))
+        setRotationBall2(Math.atan2(dx2, dy2) * (180 / Math.PI))
       }
-
-
-      depthRef.current += 0.02;
-      setDepth(depthRef.current);
-
-      requestAnimationFrame(abc);
     }
 
-    requestAnimationFrame(abc);
+    const handleTouchMove = (e: TouchEvent) => {
+      if (ball1.current && ball2.current && e.touches[0]) {
+        const rect1 = ball1.current.getBoundingClientRect()
+        const rect2 = ball2.current.getBoundingClientRect()
 
+        const centerxball1 = rect1.left + rect1.width / 2
+        const centerxball2 = rect2.left + rect2.width / 2
+        const centeryball1 = rect1.top + rect1.height / 2
+        const centeryball2 = rect2.top + rect2.height / 2
 
+        const dx1 = e.touches[0].clientX - centerxball1
+        const dx2 = e.touches[0].clientX - centerxball2
+        const dy1 = centeryball1 - e.touches[0].clientY
+        const dy2 = centeryball2 - e.touches[0].clientY
 
-    document.body.addEventListener("mousemove", (e) => {
-      if (ball1.current instanceof HTMLElement && ball2.current instanceof HTMLElement) {
-        const fullheight = window.innerHeight;
-        const fullwidth = window.innerWidth;
-        const rect1 = ball1.current.getBoundingClientRect();
-        const rect2 = ball2.current.getBoundingClientRect();
-
-        const centerxball1 = rect1.left + (rect1.width) / 2;
-        const centerxball2 = rect2.left + (rect2.width) / 2;
-
-        const centeryball1 = rect1.top + (rect1.height) / 2;
-        const centeryball2 = rect2.top + (rect2.height) / 2;
-
-        const differencexball1 = e.clientX - centerxball1;
-        const differencexball2 = e.clientX - centerxball2;
-        const differenceyball1 = centeryball1 - e.clientY;
-        const differenceyball2 = centeryball2 - e.clientY;
-
-        setMoredistance(Math.log10(Math.sqrt(differencexball1*differencexball1+ differencexball2*differencexball2)))
-       
-
-        const radianball1 = Math.atan2(differencexball1, differenceyball1)
-        const radianball2 = Math.atan2(differencexball2, differenceyball2)
-        setRotationBall1(radianball1 * 180 / Math.PI)
-        setRotationBall2(radianball2 * 180 / Math.PI)
+        setMoredistance(Math.log10(Math.sqrt(dx1 * dx1 + dx2 * dx2)))
+        setRotationBall1(Math.atan2(dx1, dy1) * (180 / Math.PI))
+        setRotationBall2(Math.atan2(dx2, dy2) * (180 / Math.PI))
       }
-    })
-      document.body.addEventListener("touchmove", (e) => {
-      if (ball1.current instanceof HTMLElement && ball2.current instanceof HTMLElement) {
-        const fullheight = window.innerHeight;
-        const fullwidth = window.innerWidth;
-        const rect1 = ball1.current.getBoundingClientRect();
-        const rect2 = ball2.current.getBoundingClientRect();
+    }
 
-        const centerxball1 = rect1.left + (rect1.width) / 2;
-        const centerxball2 = rect2.left + (rect2.width) / 2;
+    document.body.addEventListener("mousemove", handleMouseMove)
+    document.body.addEventListener("touchmove", handleTouchMove)
 
-        const centeryball1 = rect1.top + (rect1.height) / 2;
-        const centeryball2 = rect2.top + (rect2.height) / 2;
-
-        const differencexball1 = e.touches[0].clientX - centerxball1;
-        const differencexball2 = e.touches[0].clientX - centerxball2;
-        const differenceyball1 = centeryball1 - e.touches[0].clientY;
-        const differenceyball2 = centeryball2 - e.touches[0].clientY;
-
-        setMoredistance(Math.log10(Math.sqrt(differencexball1*differencexball1+ differencexball2*differencexball2)))
-       
-
-
-        const radianball1 = Math.atan2(differencexball1, differenceyball1)
-        const radianball2 = Math.atan2(differencexball2, differenceyball2)
-        setRotationBall1(radianball1 * 180 / Math.PI)
-        setRotationBall2(radianball2 * 180 / Math.PI)
+    const animate = () => {
+      if (depthRef.current > 5) {
+        setIsd(true)
+        return
       }
-    })
+      depthRef.current += 0.02
+      setDepth(depthRef.current)
+      requestAnimationFrame(animate)
+    }
+
+    requestAnimationFrame(animate)
+
+    return () => {
+      document.body.removeEventListener("mousemove", handleMouseMove)
+      document.body.removeEventListener("touchmove", handleTouchMove)
+    }
   }, [])
+
+
 
   return (
     <section className='w-screen overflow-hidden lg:h-screen h-[100svh]  relative flex flex-col justify-center '>
