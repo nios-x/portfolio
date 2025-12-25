@@ -4,8 +4,8 @@ export default function Main() {
   const svg = [
     { name: "leetcode", url: "https://leetcode.com/u/soumyajaiswal7708/" },
     { name: "github", url: "https://github.com/nios-x" },
-    { name: "x", url: "https://github.com/nios-x" },
-    { name: "instagram", url: "https://github.com/nios-x" },
+    { name: "x", url: "https://x.com/soumya_7708" },
+    { name: "instagram", url: "https://instagram.com/soumya_7708" },
   ];
 
   return (
