@@ -1,6 +1,36 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 
 export default function Page() {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const submitHandler = async () => {
+    if (!form.name || !form.email || !form.message) return alert("Fill all fields");
+
+    setLoading(true);
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+
+    setLoading(false);
+
+    if (res.ok) {
+      alert("Message sent successfully 🚀");
+      setForm({ name: "", email: "", message: "" });
+      setOpen(false);
+    } else {
+      alert("Failed to send message");
+    }
+  };
   return (
     <main className="min-h-screen w-full nf bg-white text-zinc-900 px-6 md:px-16 py-16">
       {/* Header */}
@@ -124,19 +154,67 @@ export default function Page() {
           on depth over noise and consistent improvement over shortcuts.
         </p>
       </section>
-
-      {/* Footer CTA */}
+   {/* Footer CTA */}
       <section className="max-w-4xl mx-auto mt-24 text-center">
         <p className="text-zinc-600 mb-6">
           Interested in collaborating or just want to talk tech?
         </p>
-        <a
-          href="/contact"
+        <button
+          onClick={() => setOpen(true)}
           className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-black text-white text-sm font-medium hover:bg-zinc-800 transition"
         >
           Get in Touch
-        </a>
+        </button>
       </section>
+
+      {/* Modal */}
+      {open && (
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center px-4">
+          <div className="bg-white w-full max-w-md rounded-xl p-6 relative">
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute right-4 top-4 text-zinc-500 hover:text-black"
+            >
+              ✕
+            </button>
+
+            <h2 className="text-xl font-semibold mb-4">Send a Message</h2>
+
+            <div className="space-y-3">
+              <input
+                placeholder="Your Name"
+                className="w-full border rounded-lg px-4 py-2"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+              />
+
+              <input
+                placeholder="Your Email"
+                type="email"
+                className="w-full border rounded-lg px-4 py-2"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
+
+              <textarea
+                placeholder="Your Message"
+                rows={4}
+                className="w-full border rounded-lg px-4 py-2"
+                value={form.message}
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
+              />
+
+              <button
+                onClick={submitHandler}
+                disabled={loading}
+                className="w-full bg-black text-white py-2 rounded-lg hover:bg-zinc-800 transition"
+              >
+                {loading ? "Sending..." : "Send Message"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

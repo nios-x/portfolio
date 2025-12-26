@@ -138,7 +138,7 @@ export default function Navbar() {
             >
               <span className="relative z-20 flex items-center gap-1 ">
                 {e.name}
-                <GoArrowUpRight className={`translate-y-[1] transition duration-300 ${isHovering && "rotate-90 scale-0"}`} />
+                <GoArrowUpRight className={`translate-y-[1] transition duration-300 ${isHovering && "rotate-90 scale-105"}`} />
               </span>
 
               <div

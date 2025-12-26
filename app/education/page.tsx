@@ -42,7 +42,7 @@ export default function EducationPage() {
         {educationData.map((edu) => (
           <div
             key={edu.institute}
-            className="relative w-80 bg-white/70 backdrop-blur-lg border border-zinc-300 rounded-2xl p-6 flex flex-col gap-3
+            className="relative w-full bg-white/70 backdrop-blur-lg border border-zinc-300 rounded-2xl p-6 flex flex-col gap-3
               transition-transform duration-300 "
           >
             <div className="flex items-center gap-4">

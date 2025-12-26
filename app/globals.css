@@ -9,7 +9,7 @@
 }
 
 .text-clip {
-  background: linear-gradient(90deg, #000, #8816ce);
+  background: linear-gradient(45deg,#000,red);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -24,4 +24,42 @@
 body{
   user-select: none;
 
+}
+.red-blob {
+  position: absolute;
+  top: -30%;
+  left: 30%;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 80, 80, 0.9),
+    rgba(255, 0, 0, 0.6),
+    rgba(255, 0, 0, 0.2),
+    transparent 70%
+  );
+  filter: blur(80px);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+
+.blue-blob {
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(80, 220, 255, 0.9),
+    rgba(0, 94, 255, 0.6),
+    rgba(255, 0, 225, 0.2),
+    transparent 70%
+  );
+  filter: blur(80px);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
 }
