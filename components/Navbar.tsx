@@ -132,7 +132,7 @@ export default function Navbar() {
               onMouseEnter={() => setIsHovered(e.link)}
               onMouseLeave={() => setIsHovered(null)}
               className={`relative overflow-hidden px-5 w-full py-2 text-xl lg:text-sm rounded-full font-medium 
-                  flex items-center transition justify-center gap-1 mb-2 border border-zinc-300
+                  flex items-center transition justify-center gap-1 mb-2 border border-zinc-200
                   transition-colors duration-300
                   ${isHovering ? "text-white" : "text-zinc-900"}`}
             >

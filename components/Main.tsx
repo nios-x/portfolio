@@ -1,4 +1,8 @@
-import React from "react";
+"use client"
+import React, { useState } from "react";
+
+import ContactModal from "@/components/CM";
+
 
 export default function Main() {
   const svg = [
@@ -7,9 +11,11 @@ export default function Main() {
     { name: "x", url: "https://x.com/soumya_7708" },
     { name: "instagram", url: "https://instagram.com/soumya_7708" },
   ];
+  const [open, setOpen] = useState(false);
 
   return (
-    <section className="w-full flex flex-col items-center px-4">
+    <section className="w-full flex flex-col items-center nf px-4 relative">
+      <ContactModal open={open} onClose={() => setOpen(false)} />
       {/* ---------- HEADER ---------- */}
       <p className="nf text-sm tracking-[0.3em] text-zinc-500 pt-10">
         CHECK IT OUT
@@ -100,7 +106,29 @@ export default function Main() {
             </div>
           ))}
         </div>
+
       </div>
+      {/* ---------- FLOATING CONTACT BUTTON ---------- */}
+      <button
+        onClick={() => setOpen(true)}
+        className={`
+    fixed bottom-6 right-6 z-40
+    flex items-center gap-2
+    px-5 py-4 rounded-full
+    bg-black text-white
+    shadow-lg shadow-black/30
+    transition-all duration-300
+    hover:scale-110 hover:shadow-xl
+    active:scale-95
+    animate-[float_3s_ease-in-out_infinite]
+    ${open ? "opacity-0 pointer-events-none scale-90" : ""}
+  `}
+      >
+        <span className="text-sm font-medium">Message</span>
+        <span className="text-lg">✉️</span>
+      </button>
+
+
     </section>
   );
 }
