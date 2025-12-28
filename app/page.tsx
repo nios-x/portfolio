@@ -41,9 +41,9 @@ export default function Page() {
         ref={container}
         className="nf font-light flex px-6 pt-10 gap-x-5 items-end"
       >
-        <span className="bg-[linear-gradient(45deg,#000,#000,red)] p-1 rounded-lg">
+        <span className="bgsi p-1 rounded-lg">
 
-        <img src="/pp.jpeg" className="border-1 border border-white border-3 rounded w-26" alt="" />
+        <img src="/pp.jpeg" className="border-1 border border-white border-2 rounded-md w-26" alt="" />
         </span>
 
         <div className="flex flex-col ">
