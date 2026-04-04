@@ -2,6 +2,8 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import ContactModal from "@/components/CM";
+import { useRouter } from "next/navigation";
+ 
 
 
 export default function Main() {
@@ -12,9 +14,23 @@ export default function Main() {
     { name: "instagram", url: "https://instagram.com/soumya_7708" },
   ];
   const [open, setOpen] = useState(false);
- 
+  const [foreward, setForeward] = useState(false);
+  const router = useRouter();
+
+  // optional: navigate after animation completes
+  useEffect(() => {
+    if (foreward) {
+      setTimeout(() => router.push("/verse"), 1000);
+    }
+  }, [foreward, router]);
+  
   return (
     <section className="w-full flex flex-col items-center nf px-4 relative">
+      <div
+        className={`expand-circle ${foreward ? "active" : ""}`}
+        aria-hidden="true"
+      />
+
       <ContactModal open={open} onClose={() => setOpen(false)} />
       {/* ---------- HEADER ---------- */}
       <p className="nf text-sm tracking-[0.3em] text-zinc-500 pt-10">
@@ -76,7 +92,8 @@ export default function Main() {
           GENERAL INFORMATION
         </h2>
         <div className="flex flex-wrap justify-center gap-4">
-          <h2 className="px-6 py-3 rounded-full 
+          <h2 onClick={()=>setForeward(true)} className="px-6 py-3 rounded-full
+                 
                 border border-zinc-300
                 text-sm sm:text-base
                 text-white
@@ -89,7 +106,7 @@ export default function Main() {
                 active:bg-black active:text-white
                 active:-translate-y-1
                 active:shadow-lg relative overflow-hidden z-10">
-                  <div className="my-animated-bg absolute -left-1/2 -top-1/2 w-[200%] h-[200%] -z-10" />
+                <div className="my-animated-bg absolute -left-1/2 -top-1/2 w-[200%] h-[200%] -z-10" />
               EXPLORE SOUMYA VERSE
           </h2>
           {[

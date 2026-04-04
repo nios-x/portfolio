@@ -69,6 +69,37 @@ body{
   z-index: -5;
 }
 
+/* full-screen expansion for hero circle */
+.expand-circle {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: black;
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+  z-index: 12000;
+}
+.expand-circle.active {
+  animation: expandPulse 1s ease-in forwards;
+}
+@keyframes expandPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.05);
+    opacity: 0.95;
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(18);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(30);
+    opacity: 1;
+  }
+}
+
 
 .blue-blob {
   position: fixed;
