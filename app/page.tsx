@@ -30,16 +30,12 @@ export default function Page() {
   );
 
   return (
-    <div className="">
-      <div className="red-blob">
-
-      </div>
-      <div className="blue-blob">
-
-      </div>
+    <div className="relative min-h-screen overflow-hidden">
+      <div className="red-blob" aria-hidden="true"></div>
+      <div className="blue-blob" aria-hidden="true"></div>
       <div
         ref={container}
-        className="nf font-light flex px-6 pt-10 gap-x-5 items-end"
+        className="nf font-light flex px-6 pt-10 gap-x-5 items-end relative z-30"
       >
       <span className="relative inline-block bgsi p-1 rounded-lg">
   {/* Profile Picture */}

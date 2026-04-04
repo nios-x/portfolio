@@ -1,8 +1,7 @@
-"use client"
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 
 import ContactModal from "@/components/CM";
-
 
 export default function Main() {
   const svg = [
@@ -21,25 +20,27 @@ export default function Main() {
     // reset in case of fast refresh or re-renders
     container.innerHTML = "";
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 30; i++) {
       const el = document.createElement("div");
       el.className = "particle";
       el.style.left = Math.random() * 100 + "%";
       el.style.top = Math.random() * 100 + "%";
-      const size = 20 + Math.random() * 10; // 4px - 10px
+      const size = 4 + Math.random() * 6; // 4px - 10px
       el.style.width = `${size}px`;
-      el.style.height = `${size}px`;
+      el.style.height = `${size * 2}px`;
       el.style.animationDuration = 5 + Math.random() * 7 + "s";
+      el.style.animationDelay = Math.random() * 5 + "s";
       container.appendChild(el);
     }
-
 
     return () => {
       container.innerHTML = "";
     };
   }, []);
+
   return (
-    <section className="w-full flex flex-col items-center nf px-4 relative">
+    <section className="w-full flex flex-col items-center nf px-4 relative z-20">
+      <div ref={particlesRef} className="particle-container" aria-hidden="true" />
       <ContactModal open={open} onClose={() => setOpen(false)} />
       {/* ---------- HEADER ---------- */}
       <p className="nf text-sm tracking-[0.3em] text-zinc-500 pt-10">
@@ -101,7 +102,8 @@ export default function Main() {
           GENERAL INFORMATION
         </h2>
         <div className="flex flex-wrap justify-center gap-4">
-          <h2 className="px-6 py-3 rounded-full 
+          <h2
+            className="px-6 py-3 rounded-full 
                 border border-zinc-300
                 text-sm sm:text-base
                 text-white
@@ -113,9 +115,10 @@ export default function Main() {
                 hover:shadow-lg
                 active:bg-black active:text-white
                 active:-translate-y-1
-                active:shadow-lg relative overflow-hidden z-10">
-                  <div className="my-animated-bg absolute -left-1/2 -top-1/2 w-[200%] h-[200%] -z-10" />
-              EXPLORE SOUMYA VERSE
+                active:shadow-lg relative overflow-hidden z-10"
+          >
+            <div className="my-animated-bg absolute -left-1/2 -top-1/2 w-[200%] h-[200%] -z-10" />
+            EXPLORE SOUMYA VERSE
           </h2>
           {[
             "FULL STACK DEVELOPER",
@@ -145,7 +148,6 @@ export default function Main() {
             </div>
           ))}
         </div>
-
       </div>
       {/* ---------- FLOATING CONTACT BUTTON ---------- */}
       <button
@@ -163,12 +165,9 @@ export default function Main() {
     ${open ? "opacity-0 pointer-events-none scale-90" : ""}
   `}
       >
-      <div ref={particlesRef} className="particle-container z-9999" />
         <span className="text-sm font-medium">Message</span>
         <span className="text-lg">✉️</span>
       </button>
-
-
     </section>
   );
 }

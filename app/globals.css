@@ -47,10 +47,11 @@
 }
 body{
   user-select: none;
-
+  position: relative;
+  overflow-x: hidden;
 }
 .red-blob {
-  position: absolute;
+  position: fixed;
   top: -30%;
   left: 30%;
   width: 20px;
@@ -65,12 +66,12 @@ body{
   filter: blur(80px);
   border-radius: 50%;
   pointer-events: none;
-  z-index: -1;
+  z-index: -5;
 }
 
 
 .blue-blob {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 30%;
   width: 200px;
@@ -85,7 +86,7 @@ body{
   filter: blur(80px);
   border-radius: 50%;
   pointer-events: none;
-  z-index: -1;
+  z-index: -5;
 }
 
 
@@ -111,26 +112,27 @@ body{
   height: 100%;
   overflow: hidden;
   pointer-events: none;
-  z-index: 0; /* keep above background blobs, below modals */
+  z-index: -4; /* keep behind all content */
 }
 
 .particle {
   position: absolute;
   background: linear-gradient( rgb(24, 128, 255) , rgb(255, 83, 166));
-  z-index: 0;
+  transform: skew(8deg);
+  z-index: -4;
   animation: moveDiag linear infinite;
 }
 
 @keyframes moveDiag {
   0% {
-    transform: translateX(-15vw);
-
+    transform: translateX(-15vw) skew(8deg);
+    opacity: 0;
   }
   10% {
     opacity: 1;
   }
   100% {
-    transform: translateX(115vw);
+    transform: translateX(115vw) skew(8deg);
     opacity: 0;
   }
 }
