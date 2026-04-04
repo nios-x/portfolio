@@ -87,3 +87,50 @@ body{
   pointer-events: none;
   z-index: -1;
 }
+
+
+.my-animated-bg{
+  background: linear-gradient(90deg, rgb(255, 110, 110), rgb(141, 141, 255));
+  animation: bd 2s linear infinite alternate;
+}
+
+@keyframes bd {
+  0%{
+    transform: translateX(-400px) skewX(180deg);
+  }
+  100%{
+    transform: translateX(-20px);
+  }
+}
+
+.particle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0; /* keep above background blobs, below modals */
+}
+
+.particle {
+  position: absolute;
+  background: linear-gradient( rgb(24, 128, 255) , rgb(255, 83, 166));
+  z-index: 0;
+  animation: moveDiag linear infinite;
+}
+
+@keyframes moveDiag {
+  0% {
+    transform: translateX(-15vw);
+
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(115vw);
+    opacity: 0;
+  }
+}

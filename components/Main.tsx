@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import ContactModal from "@/components/CM";
 
@@ -12,7 +12,32 @@ export default function Main() {
     { name: "instagram", url: "https://instagram.com/soumya_7708" },
   ];
   const [open, setOpen] = useState(false);
+  const particlesRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    const container = particlesRef.current;
+    if (!container) return;
+
+    // reset in case of fast refresh or re-renders
+    container.innerHTML = "";
+
+    for (let i = 0; i < 10; i++) {
+      const el = document.createElement("div");
+      el.className = "particle";
+      el.style.left = Math.random() * 100 + "%";
+      el.style.top = Math.random() * 100 + "%";
+      const size = 20 + Math.random() * 10; // 4px - 10px
+      el.style.width = `${size}px`;
+      el.style.height = `${size}px`;
+      el.style.animationDuration = 5 + Math.random() * 7 + "s";
+      container.appendChild(el);
+    }
+
+
+    return () => {
+      container.innerHTML = "";
+    };
+  }, []);
   return (
     <section className="w-full flex flex-col items-center nf px-4 relative">
       <ContactModal open={open} onClose={() => setOpen(false)} />
@@ -39,7 +64,7 @@ export default function Main() {
               hover:scale-110
               hover:border-black
               hover:shadow-[0_0_20px_rgba(0,0,0,0.15)]
-            "
+              "
           >
             <img
               src={`https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/${e.name}.svg`}
@@ -75,14 +100,28 @@ export default function Main() {
         <h2 className="text-center text-xl sm:text-2xl tracking-wide mb-10">
           GENERAL INFORMATION
         </h2>
-
         <div className="flex flex-wrap justify-center gap-4">
+          <h2 className="px-6 py-3 rounded-full 
+                border border-zinc-300
+                text-sm sm:text-base
+                text-white
+                tracking-wide
+                transition-all duration-300
+                bg-black
+                hover:bg-black hover:text-white
+                hover:-translate-y-1
+                hover:shadow-lg
+                active:bg-black active:text-white
+                active:-translate-y-1
+                active:shadow-lg relative overflow-hidden z-10">
+                  <div className="my-animated-bg absolute -left-1/2 -top-1/2 w-[200%] h-[200%] -z-10" />
+              EXPLORE SOUMYA VERSE
+          </h2>
           {[
             "FULL STACK DEVELOPER",
             "WEB3 / BLOCKCHAIN DEVELOPER",
             "COMPETITIVE PROGRAMMER",
             "SYSTEM DESIGN ENTHUSIAST",
-            "REAL-TIME APPLICATION BUILDER",
           ].map((item) => (
             <div
               key={item}
@@ -124,6 +163,7 @@ export default function Main() {
     ${open ? "opacity-0 pointer-events-none scale-90" : ""}
   `}
       >
+      <div ref={particlesRef} className="particle-container z-9999" />
         <span className="text-sm font-medium">Message</span>
         <span className="text-lg">✉️</span>
       </button>
