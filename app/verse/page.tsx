@@ -631,6 +631,39 @@ function FlyingTitleSideLeft() {
   );
 }
 
+function FlyingTitleNoText() {
+  return (
+    <Float
+      speed={0}
+      floatIntensity={0}
+      rotationIntensity={0}
+      position={[3.5, 2.8, 4.5]}
+      rotation={[0, -Math.PI / 6, 0]}
+    >
+      <Text
+        font="/nothing-font-5x7.otf"
+        fontSize={0.14}
+        lineHeight={0.95}
+        anchorX="center"
+        anchorY="middle"
+        material-toneMapped={false}
+      >
+        'Sorry, Soumya we have {"\n"} someone better than you'{"\n"}
+        Really really  You think so{"\n"} I'M BETTER
+        <meshStandardMaterial
+          color="#ff4b4b"
+          emissive="#ff4b4b"
+          emissiveIntensity={1.8}
+          metalness={1.0}
+          roughness={1.1}
+          
+          side={THREE.DoubleSide}
+        />
+      </Text>
+    </Float>
+  );
+}
+
 // Moon component with craters and enhanced glow
 function Moon() {
   const moonRef = useRef<THREE.Mesh>(null);
@@ -1085,6 +1118,7 @@ export default function Page() {
           <FlyingTitleBack2/>
           <FlyingTitleSideRight/>
           <FlyingTitleSideLeft/>
+          <FlyingTitleNoText />
           <CodingText1 />
           <CodingText2 />
           <CodingText3 />
