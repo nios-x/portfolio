@@ -119,19 +119,16 @@ function Scene2() {
   <meshBasicMaterial color="#FFB812" transparent opacity={0.45} />
         </mesh>
       </group>
-      {/* Dedicated fill for the second model so the car isn't lost in shadow */}
-      <ambientLight intensity={0.65} color="#FF8AFF" />
+      <ambientLight intensity={0.4} color="#FF8AFF" />
       <hemisphereLight
-        intensity={0.59}
+        intensity={0.35}
         color="#FF8AFF"
         groundColor="#1a1a1a"
         position={[0, 3.5, 0]}
       />
-      <pointLight position={[0, 2.6, 0]} intensity={2.4} color="#ff6bfd" decay={0.1} />
-      <pointLight position={[-12.2, 2.8, 102.8]} intensity={1.0} color="#6747ff" decay={0} />
-      {/* Neon rim lights to make the car pop */}
-      <pointLight position={[1.2, 1.8, 1.2]} intensity={1.6} color="#6ff7ff" decay={2} />
-      <pointLight position={[-1.2, 1.6, -1.2]} intensity={1.4} color="#ff6bfd" decay={2} />
+      <pointLight position={[0, 2.6, 0]} intensity={1.0} color="#ff6bfd" decay={0.1} />
+      <pointLight position={[1.2, 1.8, 1.2]} intensity={1.0} color="#6ff7ff" decay={2} />
+      <pointLight position={[-1.2, 1.6, -1.2]} intensity={0.8} color="#ff6bfd" decay={2} />
       <spotLight
         position={[-2.4, 4.2, 2.2]}
         angle={0.55}
@@ -223,8 +220,8 @@ function RainbowOrbLights() {
   });
   return (
     <>
-      <pointLight ref={light1} intensity={2.2} decay={1.8} distance={20} />
-      <pointLight ref={light2} intensity={1.9} decay={1.6} distance={20} />
+      <pointLight ref={light1} intensity={1.0} decay={1.8} distance={20} />
+      <pointLight ref={light2} intensity={0.8} decay={1.6} distance={20} />
     </>
   );
 }
@@ -236,8 +233,8 @@ function LavaGlow() {
     const t = clock.elapsedTime;
     if (!meshRef.current) return;
     const mat = meshRef.current.material as THREE.MeshStandardMaterial;
-    const pulse = 0.5 + 0.5 * Math.sin(t * 2.4);
-    mat.emissiveIntensity = 1.2 + pulse * 1.6;
+    const pulse = 0.5 + 0.5 * Math.sin(t * 1.2); // reduced frequency
+    mat.emissiveIntensity = 0.8 + pulse * 0.8; // reduced intensity
     mat.color.setHSL(0.05 + pulse * 0.05, 1, 0.5);
     mat.emissive.setHSL(0.04 + pulse * 0.06, 1, 0.45 + pulse * 0.1);
   });
@@ -247,7 +244,7 @@ function LavaGlow() {
       rotation={[-Math.PI / 2, 0, 0]}
       position={[CAR_POSITION[0], 0.05, CAR_POSITION[2]]}
     >
-      <circleGeometry args={[5.5, 64]} />
+      <circleGeometry args={[5.5, 32]} />
       <meshStandardMaterial
         color="#ff6b00"
         emissive="#ff3b00"
@@ -356,7 +353,7 @@ function FlyingTitle() {
     if (textRef.current && textRef.current.material) {
       const t = clock.elapsedTime;
       const mat = textRef.current.material as THREE.MeshStandardMaterial;
-      mat.emissiveIntensity = 3.0 + Math.sin(t * 1.2) * 1.5;
+      mat.emissiveIntensity = 1.5 + Math.sin(t * 1.2) * 0.8;
     }
   });
 
@@ -367,13 +364,7 @@ function FlyingTitle() {
     rotationIntensity={0}
       position={[0, 6.4, -6]}
     >
-      {/* Glow lights around the text */}
-      <pointLight intensity={3.5} color="#00ff00" distance={8} decay={2} position={[1, 0, 0]} />
-      <pointLight intensity={3.5} color="#00ff00" distance={8} decay={2} position={[-1, 0, 0]} />
-      <pointLight intensity={3.5} color="#00ff00" distance={8} decay={2} position={[0, 1, 0]} />
-      <pointLight intensity={3.5} color="#00ff00" distance={8} decay={2} position={[0, -1, 0]} />
-      <pointLight intensity={4.2} color="#00ff00" distance={10} decay={1.5} />
-      
+      {/* Removed redundant glow lights - using material emissive instead */}
       <Text
         ref={textRef}
         font="/nothing-font-5x7.otf"
@@ -388,7 +379,7 @@ function FlyingTitle() {
         <meshStandardMaterial
           color="#00dd00"
           emissive="#00ff00"
-          emissiveIntensity={3.0}
+          emissiveIntensity={1.5}
           metalness={1.45}
           roughness={0.85}
           side={THREE.DoubleSide}
@@ -516,13 +507,7 @@ function FlyingTitleBack1() {
       position={[0, 6.0, 6]}
       rotation={[0, Math.PI, 0]}
     >
-      {/* Glow lights around the text */}
-      <pointLight intensity={3.5} color="#00ff00" distance={8} decay={2} position={[1, 0, 0]} />
-      <pointLight intensity={3.5} color="#00ff00" distance={8} decay={2} position={[-1, 0, 0]} />
-      <pointLight intensity={3.5} color="#00ff00" distance={8} decay={2} position={[0, 1, 0]} />
-      <pointLight intensity={3.5} color="#00ff00" distance={8} decay={2} position={[0, -1, 0]} />
-      <pointLight intensity={4.2} color="#00ff00" distance={10} decay={1.5} />
-      
+      {/* Removed redundant glow lights - using material emissive instead */}
       <Text
         ref={textRef}
         font="/nothing-font-5x7.otf"
@@ -662,11 +647,11 @@ function Moon() {
     <group position={[12, 18, -15]}>
       {/* Main moon sphere with enhanced glow */}
       <mesh ref={moonRef}>
-        <sphereGeometry args={[3.5, 32, 32]} />
+        <sphereGeometry args={[3.5, 16, 16]} />
         <meshStandardMaterial
           color="#ffffff"
           emissive="#ffeb99"
-          emissiveIntensity={2.2}
+          emissiveIntensity={1.0}
           roughness={0.6}
           metalness={0.2}
         />
@@ -727,7 +712,7 @@ function RainbowArc() {
     <group ref={groupRef} position={[-8, 8, 10]}>
       {colors.map((color, idx) => (
         <mesh key={`rainbow-${idx}`} position={[0, 0, idx * 0.08]}>
-          <torusGeometry args={[4.5 + idx * 0.35, 0.25, 24, 60, 0, Math.PI]} />
+          <torusGeometry args={[4.5 + idx * 0.35, 0.25, 16, 32, 0, Math.PI]} />
           <meshStandardMaterial
             color={color}
             emissive={color}
@@ -1056,7 +1041,7 @@ export default function Page() {
   return (
     <div className="h-screen w-screen bg-white relative">
       <Canvas
-        dpr={[1, 1.5]}
+        dpr={[1, 1]}
         camera={{
           position: isMobile ? [0, 1.6, 10] : [0, 1.3, 8],
           fov: 50,
@@ -1065,7 +1050,9 @@ export default function Page() {
           antialias: false,
           toneMapping: THREE.ACESFilmicToneMapping,
           powerPreference: "high-performance",
+          precision: "lowp",
         }}
+        frameloop="demand"
       >
         <color attach="background" args={["#03050b"]} />
         <fog attach="fog" args={["#05070f", 20, 50]} />
@@ -1110,7 +1097,7 @@ export default function Page() {
         </Suspense>
 
         <Sparkles
-          count={60}
+          count={20}
           speed={0.35}
           opacity={0.35}
           scale={[15, 10, 10]}
