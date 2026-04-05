@@ -1043,7 +1043,7 @@ export default function Page() {
       <Canvas
         dpr={[1, 1]}
         camera={{
-          position: isMobile ? [0, 1.6, 10] : [0, 1.3, 8],
+          position: isMobile ? [5, 1.6, 8.66] : [4, 1.3, 6.93],
           fov: 50,
         }}
         gl={{
