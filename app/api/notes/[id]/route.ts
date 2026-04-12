@@ -7,14 +7,18 @@ function hashPassword(pw: string) {
   return crypto.createHash("sha256").update(pw).digest("hex");
 }
 
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
+
   await connectDb();
-  const note = await Notes.findById(params.id).lean();
+  const note = await Notes.findById(id).lean();
   if (!note) return NextResponse.json({ message: "Not found" }, { status: 404 });
   return NextResponse.json({ note });
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
+
   await connectDb();
 
   const { content, password } = await req.json().catch(() => ({ content: "", password: "" }));
@@ -26,7 +30,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json({ message: "invalid password" }, { status: 401 });
   }
 
-  const note = await Notes.findById(params.id);
+  const note = await Notes.findById(id);
   if (!note) return NextResponse.json({ message: "Not found" }, { status: 404 });
   note.content = content;
   await note.save();

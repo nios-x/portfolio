@@ -11,10 +11,12 @@ function hashPassword(pw: string) {
   return crypto.createHash("sha256").update(pw).digest("hex");
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   if (!isAuthed(req)) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
+
+  const { id } = await context.params;
 
   await connectDb();
   const { content, password } = await req.json().catch(() => ({ content: "", password: "" }));
@@ -26,7 +28,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json({ message: "Invalid password" }, { status: 401 });
   }
 
-  const note = await Notes.findById(params.id);
+  const note = await Notes.findById(id);
   if (!note) return NextResponse.json({ message: "Not found" }, { status: 404 });
   note.content = content;
   await note.save();

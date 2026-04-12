@@ -14,13 +14,13 @@ export default function Page() {
     email: "",
     message: "",
   });
-  const experienceContainerRef = useRef(null);
+  const experienceContainerRef = useRef<any>(null);
 
   useEffect(() => {
     const cards = experienceContainerRef.current?.querySelectorAll(".experience-card");
     if (!cards) return;
 
-    cards.forEach((card, index) => {
+    cards.forEach((card:any, index:any) => {
       gsap.fromTo(
         card,
         {
