@@ -42,6 +42,11 @@ export default function Navbar() {
       link: "/projects",
       active: false
     },
+    {
+      name: "Notes",
+      link: "/notes",
+      active: false
+    },
   ])
   if (isVerse) {
     return null; // hide navbar on /verse

@@ -1,4 +1,4 @@
-ï»¿"use client";
+"use client";
 
 import { useEffect, useMemo, useState, ChangeEvent, ReactNode } from "react";
 
@@ -47,6 +47,8 @@ interface AdminPayload {
   };
 }
 
+const NEW_NOTE_ID = "new";
+
 function formatDate(value: string) {
   return new Date(value).toLocaleString();
 }
@@ -57,8 +59,17 @@ export default function AnalyticsPage() {
   const [data, setData] = useState<AdminPayload | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [noteInput, setNoteInput] = useState("");
   const [changeInput, setChangeInput] = useState("");
+
+  // notes
+  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
+  const [noteDraft, setNoteDraft] = useState("");
+  const [notePassword, setNotePassword] = useState("");
+  const [noteStatus, setNoteStatus] = useState<string | null>(null);
+  const [noteSaving, setNoteSaving] = useState(false);
+  const [pwNew, setPwNew] = useState("");
+  const [pwCurrent, setPwCurrent] = useState("");
+  const [pwStatus, setPwStatus] = useState<string | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -73,6 +84,10 @@ export default function AnalyticsPage() {
       const json = (await res.json()) as AdminPayload;
       setData(json);
       setAuthState("ready");
+      if (!selectedNoteId && json.notes.length > 0) {
+        setSelectedNoteId(json.notes[0]._id);
+        setNoteDraft(json.notes[0].content || "");
+      }
     } catch (err) {
       setError("Failed to load analytics. Try again.");
     } finally {
@@ -82,6 +97,7 @@ export default function AnalyticsPage() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLogin = async () => {
@@ -107,24 +123,6 @@ export default function AnalyticsPage() {
     }
   };
 
-  const handleCreateNote = async () => {
-    if (!noteInput.trim()) return;
-    setLoading(true);
-    try {
-      const res = await fetch("/api/admin/notes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: noteInput.trim() }),
-      });
-      if (res.ok) {
-        setNoteInput("");
-        await fetchData();
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleCreateChange = async () => {
     if (!changeInput.trim()) return;
     setLoading(true);
@@ -141,6 +139,76 @@ export default function AnalyticsPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const selectNote = (note: Note) => {
+    setSelectedNoteId(note._id);
+    setNoteDraft(note.content || "");
+    setNoteStatus(null);
+  };
+
+  const startNewNote = () => {
+    setSelectedNoteId(NEW_NOTE_ID);
+    setNoteDraft("");
+    setNoteStatus("New note (will be created on save)");
+  };
+
+  const handleSaveNote = async () => {
+    if (!noteDraft.trim()) {
+      setNoteStatus("Content required");
+      return;
+    }
+    if (!notePassword) {
+      setNoteStatus("Password required");
+      return;
+    }
+    setNoteSaving(true);
+    setNoteStatus(null);
+    try {
+      const isNew = selectedNoteId === NEW_NOTE_ID || !selectedNoteId;
+      const url = isNew ? "/api/admin/notes" : `/api/admin/notes/${selectedNoteId}`;
+      const method = isNew ? "POST" : "PUT";
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: noteDraft, password: notePassword }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setNoteStatus(body.message || "Failed to save");
+        return;
+      }
+      setNoteStatus("Saved");
+      setNotePassword("");
+      await fetchData();
+      if (body.note) {
+        setSelectedNoteId(body.note._id);
+        setNoteDraft(body.note.content || "");
+      }
+    } finally {
+      setNoteSaving(false);
+    }
+  };
+
+  const setPasswordInDb = async () => {
+    setPwStatus(null);
+    if (!pwNew) {
+      setPwStatus("New password required");
+      return;
+    }
+    const res = await fetch("/api/notes/password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: pwNew, currentPassword: pwCurrent || undefined }),
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      setPwStatus(body.message || "Failed to set password");
+      return;
+    }
+    setPwStatus(body.changed ? "Password updated" : "Password set");
+    setPwNew("");
+    setPwCurrent("");
   };
 
   const latestCountries = useMemo(() => {
@@ -222,15 +290,93 @@ export default function AnalyticsPage() {
           onSubmit={handleCreateChange}
           buttonLabel="Add Message"
         />
-        <FormCard
-          title="Add Note"
-          value={noteInput}
-          placeholder="Internal note..."
-          onChange={setNoteInput}
-          onSubmit={handleCreateNote}
-          buttonLabel="Save Note"
-          textarea
-        />
+        <div className="border border-zinc-200 rounded-3xl p-4 bg-white/70 backdrop-blur flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <div className="font-semibold">Notes (password protected)</div>
+            <div className="flex gap-2">
+              <button
+                onClick={startNewNote}
+                className="px-3 py-1 text-sm rounded-lg border border-zinc-200 hover:bg-black hover:text-white"
+              >
+                New
+              </button>
+              <button
+                onClick={fetchData}
+                className="px-3 py-1 text-sm rounded-lg border border-zinc-200 hover:bg-black hover:text-white"
+              >
+                Reload
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-3">
+            <div className="w-full md:w-1/3 flex flex-col gap-2 max-h-72 overflow-y-auto pr-1">
+              {(data?.notes || []).map((note) => (
+                <button
+                  key={note._id}
+                  className={`text-left border border-zinc-200 rounded-lg px-3 py-2 hover:bg-black/5 transition ${
+                    selectedNoteId === note._id ? "bg-black text-white" : "bg-white"
+                  }`}
+                  onClick={() => selectNote(note)}
+                >
+                  <div className="text-sm line-clamp-2">{note.content || "(empty)"}</div>
+                  <div className="text-[11px] text-zinc-500 mt-1">{formatDate(note.createdAt)}</div>
+                </button>
+              ))}
+              {(data?.notes?.length ?? 0) === 0 && <div className="text-sm text-zinc-500">No notes yet.</div>}
+            </div>
+            <div className="w-full md:w-2/3 flex flex-col gap-3">
+              <textarea
+                className="w-full min-h-[200px] border border-zinc-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+                value={noteDraft}
+                onChange={(e) => setNoteDraft(e.target.value)}
+                placeholder="Write note..."
+              />
+              <input
+                type="password"
+                placeholder="Notes password"
+                className="w-full border border-zinc-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+                value={notePassword}
+                onChange={(e) => setNotePassword(e.target.value)}
+              />
+              <div className="flex items-center gap-3 flex-wrap">
+                <button
+                  onClick={handleSaveNote}
+                  disabled={noteSaving}
+                  className="px-4 py-2 rounded-lg bg-black text-white hover:bg-zinc-800 disabled:opacity-60"
+                >
+                  {noteSaving ? "Saving..." : "Save Note"}
+                </button>
+                {noteStatus && <span className="text-sm text-zinc-600">{noteStatus}</span>}
+              </div>
+            </div>
+          </div>
+          <div className="border border-zinc-200 rounded-2xl p-3 bg-white/70 flex flex-col gap-2">
+            <div className="font-semibold text-sm">Set / change notes password</div>
+            <input
+              type="password"
+              placeholder="Current password (blank if first time)"
+              className="w-full border border-zinc-200 rounded-lg px-3 py-2"
+              value={pwCurrent}
+              onChange={(e) => setPwCurrent(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="New password"
+              className="w-full border border-zinc-200 rounded-lg px-3 py-2"
+              value={pwNew}
+              onChange={(e) => setPwNew(e.target.value)}
+            />
+            <div className="flex items-center gap-3">
+              <button
+                onClick={setPasswordInDb}
+                className="px-4 py-2 rounded-lg bg-black text-white hover:bg-zinc-800"
+              >
+                Save Password
+              </button>
+              {pwStatus && <span className="text-xs text-zinc-600">{pwStatus}</span>}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -245,7 +391,7 @@ export default function AnalyticsPage() {
           )}
         />
         <ListCard
-          title="Notes"
+          title="Notes (view)"
           items={data?.notes || []}
           render={(item: Note) => (
             <div className="flex items-start justify-between gap-2">
@@ -285,7 +431,7 @@ export default function AnalyticsPage() {
                   <td className="py-2 pr-3">{item.page || "-"}</td>
                   <td className="py-2 pr-3 truncate max-w-[180px]">{item.referrer || "-"}</td>
                   <td className="py-2 pr-3 whitespace-nowrap">
-                    {item.device?.type || ""} {item.device?.browser && `â€¢ ${item.device.browser}`} {item.device?.os && `â€¢ ${item.device.os}`}
+                    {item.device?.type || ""} {item.device?.browser && `• ${item.device.browser}`} {item.device?.os && `• ${item.device.os}`}
                   </td>
                   <td className="py-2 pr-3 whitespace-nowrap">
                     {item.location?.city || ""} {item.location?.country && `(${item.location.country})`}

@@ -11,28 +11,14 @@ function hashPassword(pw: string) {
   return crypto.createHash("sha256").update(pw).digest("hex");
 }
 
-export async function GET(req: NextRequest) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   if (!isAuthed(req)) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
   await connectDb();
-
-  const notes = await Notes.find().sort({ createdAt: -1 }).limit(100).lean();
-  return NextResponse.json({ notes });
-}
-
-export async function POST(req: NextRequest) {
-  if (!isAuthed(req)) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
-  await connectDb();
-
   const { content, password } = await req.json().catch(() => ({ content: "", password: "" }));
-  if (!content || typeof content !== "string") {
-    return NextResponse.json({ message: "Content is required" }, { status: 400 });
-  }
+  if (!content) return NextResponse.json({ message: "Content is required" }, { status: 400 });
 
   const pwDoc = await NotePassword.findOne();
   if (!pwDoc) return NextResponse.json({ message: "Password not set" }, { status: 400 });
@@ -40,6 +26,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Invalid password" }, { status: 401 });
   }
 
-  const note = await Notes.create({ content });
-  return NextResponse.json({ note });
+  const note = await Notes.findById(params.id);
+  if (!note) return NextResponse.json({ message: "Not found" }, { status: 404 });
+  note.content = content;
+  await note.save();
+  return NextResponse.json({ ok: true, note });
 }
