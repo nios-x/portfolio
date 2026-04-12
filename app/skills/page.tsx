@@ -3,7 +3,14 @@ import React from "react";
 const skills = [
   {
     category: "Languages",
-    items: ["JavaScript", "TypeScript", "Python", "C++"],
+    items: [
+      "JavaScript",
+      "TypeScript",
+      "Python",
+      "C++",
+      "Rust",
+      "Solidity",
+    ],
   },
   {
     category: "Frontend",
@@ -14,6 +21,8 @@ const skills = [
       "React Native",
       "Three.js",
       "React Three Fiber",
+      "HTML",
+      "CSS",
     ],
   },
   {
@@ -22,9 +31,12 @@ const skills = [
       "Node.js",
       "Express",
       "Django",
+      "Flask",
       "REST APIs",
+      "GraphQL",
       "WebSockets",
       "WebRTC",
+      "Authentication (JWT, OTP)",
     ],
   },
   {
@@ -35,26 +47,48 @@ const skills = [
       "Prisma",
       "Redis",
       "SQLite",
+      "Supabase",
+      "Qdrant",
+      "Neo4j",
     ],
   },
   {
-    category: "DevOps & Tools",
+    category: "DevOps & Cloud",
     items: [
       "Docker",
+      "Kubernetes",
       "Nginx",
-      "CI/CD (Basics)",
       "Git & GitHub",
+      "GitHub Actions",
+      "CI/CD",
       "Linux",
+      "AWS (Basics)",
+      "GCP (Basics)",
+      "Vercel",
+      "Netlify",
+      "Cloudflare",
     ],
   },
   {
     category: "System & CS Fundamentals",
     items: [
       "Data Structures & Algorithms",
-      "Asynchronous Systems",
+      "System Design",
       "Concurrency",
-      "System Design (Basics)",
+      "Asynchronous Systems",
       "Networking Fundamentals",
+      "Scalable Architecture",
+    ],
+  },
+  {
+    category: "Web3 & Blockchain",
+    items: [
+      "Solana",
+      "Smart Contracts",
+      "Cryptography (Ed25519)",
+      "Wallet Integration",
+      "@solana/web3.js",
+      "Token Systems",
     ],
   },
   {
@@ -63,7 +97,31 @@ const skills = [
       "Three.js",
       "WebGL Concepts",
       "Real-time Multiplayer Systems",
+      "Game Physics Basics",
     ],
+  },
+];
+
+const links = [
+  {
+    name: "GitHub",
+    url: "https://github.com/nios-x",
+  },
+  {
+    name: "LinkedIn",
+    url: "https://www.linkedin.com/in/soumya-jaiswal7708",
+  },
+  {
+    name: "LeetCode",
+    url: "https://leetcode.com/u/soumyajaiswal7708/",
+  },
+  {
+    name: "Portfolio",
+    url: "https://soumya7708.vercel.app",
+  },
+  {
+    name: "Email",
+    url: "mailto:soumyajaiswal7708@gmail.com",
   },
 ];
 
@@ -72,11 +130,28 @@ export default function Page() {
     <section className="max-w-5xl nf mx-auto px-6 py-16">
       {/* Header */}
       <div className="mb-12">
-        <h1 className="text-4xl font-bold tracking-tight">Skills</h1>
+        <h1 className="text-4xl font-bold tracking-tight">
+          Soumya Jaiswal — Skills
+        </h1>
         <p className="mt-4 text-zinc-600">
-          Technologies, tools, and systems I’ve worked with while building
-          real-world products and scalable applications.
+          Full-stack developer focused on scalable systems, real-time apps,
+          and Web3. Strong in DSA and backend architecture.
         </p>
+      </div>
+
+      {/* Links */}
+      <div className="mb-12 flex flex-wrap gap-3">
+        {links.map((link, i) => (
+          <a
+            key={i}
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm px-4 py-2 rounded-full border border-zinc-300 hover:bg-zinc-100 transition"
+          >
+            {link.name}
+          </a>
+        ))}
       </div>
 
       {/* Skills Grid */}
@@ -107,8 +182,8 @@ export default function Page() {
       {/* Footer */}
       <div className="mt-20 pt-8 border-t text-sm text-zinc-600">
         <p>
-          Continuously learning and refining — currently focused on
-          system design, DevOps, and Web3 fundamentals.
+          Currently deep diving into System Design, DevOps (Kubernetes),
+          and Web3 ecosystems while building high-performance applications.
         </p>
       </div>
     </section>

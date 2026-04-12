@@ -1,28 +1,29 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Main from "@/components/Main";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { useCount } from "@/CountProvider";
 
 gsap.registerPlugin(useGSAP);
 
 export default function Page() {
+  const count = useCount();
   const container = useRef<HTMLDivElement | null>(null);
-
   useGSAP(
     () => {
       gsap.from(
         ".box",
         {
-          scale:0.6,
-          yoyo:true,
-          repeat:-1,
+          scale: 0.6,
+          yoyo: true,
+          repeat: -1,
           opacity: 1,
           stagger: 0.05,
           duration: 0.6,
           ease: "power2.out",
-          
+
         }
       );
     },
@@ -37,14 +38,14 @@ export default function Page() {
         ref={container}
         className="nf font-light flex px-6 pt-10 gap-x-5 items-end relative z-30"
       >
-      <span className="relative inline-block bgsi p-1 rounded-lg">
-  {/* Profile Picture */}
-  <img
-    src="/pp.jpeg"
-    className="border border-white rounded-md w-26"
-    alt="profile"
-  />
-</span>
+        <span className="relative inline-block bgsi p-1 rounded-lg">
+          {/* Profile Picture */}
+          <img
+            src="/pp.jpeg"
+            className="border border-white rounded-md w-26"
+            alt="profile"
+          />
+        </span>
 
 
         <div className="flex flex-col ">
@@ -65,6 +66,10 @@ export default function Page() {
       </div>
 
       <Main />
+      { count !== "0" && <div className="absolute bottom-4 left-4 text-sm text-zinc-400 nf z-9999">
+          Total Visits: {count}
+        </div>
+      }
     </div>
   );
 }

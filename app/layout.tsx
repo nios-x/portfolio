@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-
+import CountProvider from "@/CountProvider";
 export const metadata: Metadata = {
   title: "Soumya Jaiswal | Full-Stack Developer & Open-Source Contributor",
   description:
@@ -20,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         <Navbar />
-        {children}
+        <CountProvider>
+          {children}
+        </CountProvider>
       </body>
     </html>
   );
