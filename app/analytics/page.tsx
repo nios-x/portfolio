@@ -431,7 +431,7 @@ export default function AnalyticsPage() {
                   <td className="py-2 pr-3">{item.page || "-"}</td>
                   <td className="py-2 pr-3 truncate max-w-[180px]">{item.referrer || "-"}</td>
                   <td className="py-2 pr-3 whitespace-nowrap">
-                    {item.device?.type || ""} {item.device?.browser && `• ${item.device.browser}`} {item.device?.os && `• ${item.device.os}`}
+                    {item.device?.type || ""} {item.device?.browser && `\u2022 ${item.device.browser}`} {item.device?.os && `\u2022 ${item.device.os}`}
                   </td>
                   <td className="py-2 pr-3 whitespace-nowrap">
                     {item.location?.city || ""} {item.location?.country && `(${item.location.country})`}
@@ -523,4 +523,4 @@ function ListCard<T>({
       </div>
     </div>
   );
-}
+}
