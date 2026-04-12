@@ -54,7 +54,7 @@ export default function Page() {
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight">Projects</h1>
         <p className="mt-4 text-zinc-600">
-          A selection of systems, platforms, and products I’ve built — focusing
+          A selection of systems, platforms, and products I’ve built - focusing
           on scalability, performance, and real-time experiences.
         </p>
       </div>

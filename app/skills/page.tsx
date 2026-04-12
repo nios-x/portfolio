@@ -131,7 +131,7 @@ export default function Page() {
       {/* Header */}
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight">
-          Soumya Jaiswal — Skills
+          Soumya Jaiswal - Skills
         </h1>
         <p className="mt-4 text-zinc-600">
           Full-stack developer focused on scalable systems, real-time apps,

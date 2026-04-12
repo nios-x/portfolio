@@ -54,7 +54,7 @@ export default function Page() {
           <h2 className="text-2xl font-semibold mb-4">Who I Am</h2>
           <p className="text-zinc-700 leading-relaxed mb-4">
             I’m Soumya, a developer focused on crafting clean, scalable, and
-            user-friendly applications. I enjoy working across the stack —
+            user-friendly applications. I enjoy working across the stack -
             from designing intuitive UIs to building efficient backends.
           </p>
           <p className="text-zinc-700 leading-relaxed">

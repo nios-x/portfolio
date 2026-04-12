@@ -1,6 +1,4 @@
 import mongoose, { Schema, models, model } from "mongoose";
-import connectDb from "@/lib/db";
-connectDb();
 
 const visitsCounterSchema = new mongoose.Schema({
     count: {
