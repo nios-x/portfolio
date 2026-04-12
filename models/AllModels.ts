@@ -54,4 +54,12 @@ const Notes = models.Notes || mongoose.model("Notes", new mongoose.Schema({
     },
 }));
 
-export { VisitsCounter, Analytics, ChangeMessages, Notes };
+const NotePassword = models.NotePassword || mongoose.model("NotePassword", new mongoose.Schema({
+    hash: String,
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+}));
+
+export { VisitsCounter, Analytics, ChangeMessages, Notes, NotePassword };

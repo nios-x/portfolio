@@ -1,4 +1,4 @@
-"use client";
+ï»¿"use client";
 
 import { useEffect, useMemo, useState, ChangeEvent, ReactNode } from "react";
 
@@ -285,7 +285,7 @@ export default function AnalyticsPage() {
                   <td className="py-2 pr-3">{item.page || "-"}</td>
                   <td className="py-2 pr-3 truncate max-w-[180px]">{item.referrer || "-"}</td>
                   <td className="py-2 pr-3 whitespace-nowrap">
-                    {item.device?.type || ""} {item.device?.browser && `• ${item.device.browser}`} {item.device?.os && `• ${item.device.os}`}
+                    {item.device?.type || ""} {item.device?.browser && `â€¢ ${item.device.browser}`} {item.device?.os && `â€¢ ${item.device.os}`}
                   </td>
                   <td className="py-2 pr-3 whitespace-nowrap">
                     {item.location?.city || ""} {item.location?.country && `(${item.location.country})`}
